@@ -2,48 +2,89 @@
 #include <cstdlib>
 #include <ctime>
 
-//TODO: Create a function named isValidMove(). It needs to have boolean return type
-//      and it needs to take two parameters: int userMove and int stones.
-//      This function is to determine if the move is valid or not. If the user move
-//      is less than 1, greater than 3, or if their move is greater than the number
-//      of available stones, then return false. Else return true.
+bool isValidMove(int userMove, int stones){
+    bool check;
+    if (userMove < 1 or userMove > 3 or userMove > stones){
+        check = false;
+    }
+    else{
+        check = true;
+    }
+    return check;
+}
 
-//TODO: Create a function named getUserMove(). It needs to have a int return type and
-//      it needs to take one parameter: int stones.
-//      The purpose of the function is to get the users move. You will need to
-//      do the following steps in the function:
-//      1) create a a loop that will only break when a valid move is made
-//      2) inside the loop ask the user how many stones they would like to take and
-//         then have them input their answer
-//      3) if the move is valid, return the user's move. Else print "Invalid amount."
-//         (hint: use the isValidMove function to test if the move is valid)
+int getUserMove(int stones){
+    bool check = true;
+    int userMove;
+    while (check){
+        std :: cout << "How many stones are you taking?\n";
+        std:: cin >> userMove;
+        check = isValidMove(userMove, stones);
+        if (!check){
+            std:: cout << "Invalid amount\n";
+            check = true;
+        }
+        else{
+            check = false;
+        }
+    }
+    return userMove;
+}
 
-//TODO: Create a function named computerMove() that has a return type of int. It needs
-//      to take one parameter: int stones.
-//      The purpose of this function is to program how many stones the computer will
-//      take on their move.
-//      If the number of stones = 1 or 2 then return 1. If stones = 3 then return 2.
-//      If stones = 4 then return 3. Else return a random number between 1 and 3.
+int computerMove(int stones){
+    int computerAmount;
+    if (stones == 1 || stones == 2){
+        computerAmount = 1;
+    }
+    else if(stones == 3){
+        computerAmount = 2;
+    }
+    else if(stones == 4){
+        computerAmount = 3;
+    }
+    else{
+        computerAmount = rand() % 3 +1;
+    }
+    return computerAmount;
+}
 
-//TODO: Create a function of type bool named checkWin(). It will take one parameter: int stones
-//      This one should be very simple, if there are no stones left then return true else 
-//      return false.
+bool checkWin(int stones){
+    bool check = true;
+    if (!stones){
+        check = false;
+    }
+    else{
+        check = true;
+    }
+    return check;
+}
 
 int main() {
-    //TODO: Start the stone count at 16 and tell the user how many stones are in the 
-    //      pile
+    int stones = 16;
+    bool playGame = true;
+    int userMove;
+    int computerTurn;
+    std:: cout << "Welcome to NIM! The goal of the game is to take the last of the stones." << std::endl << "The pile starts at 16. You may take 1-3 stones at a time. ";
 
-    //TODO: Create a loop that will only break when the game is over.
-    //      Within the loop, have the user take their move then subtract
-    //      the result of the user's move with the total number of stones.
-
-    //TODO: Once again print how many stones are remaining and then check the
-    //      the win condition.
-
-    //TODO: Now have the computer take its turn. Subtract the computer's move
-    //      from the total number of stones.
-
-    //TODO: Print the total number of stones and then check the win condition
+    while (playGame){
+        userMove = getUserMove(stones);
+        stones = stones - userMove;
+        std::cout << "There are " << stones << " stones left.\n";
+        if (stones<=0){
+            std::cout << "You win!\n";
+            break;
+        }
+        computerTurn = computerMove(stones);
+        stones = stones - computerTurn;
+        std::cout << "The computer took " << computerTurn << " stones.\n";
+        std::cout << "There are " << stones << " stones left.\n";
+        if (stones <= 0){
+            std::cout << "You lose!\n";
+            break;
+        }
+        playGame = checkWin(stones);
+    }
+    std::cout << "The game is over. Thank you for playing!\n";
 
     return 0;
 }
